@@ -1,5 +1,5 @@
 import './App.css';
-import { getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { FacebookAuthProvider, getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import app from './firebase/firebase.init';
 import { useState } from 'react';
 
@@ -9,6 +9,7 @@ function App() {
   const [user, setUser] = useState({})
   const googleProvider = new GoogleAuthProvider();
   const githubProvider = new GithubAuthProvider();
+  const facebookProvider = new FacebookAuthProvider();
 
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, googleProvider)
@@ -35,7 +36,19 @@ function App() {
       .then(result => {
         const user = result.user;
         setUser(user)
-    })
+      })
+      .catch(error => {
+        console.error('error: ', error);
+      })
+  }
+
+  const handleFacebookSignIn = () => {
+    signInWithPopup(auth, facebookProvider)
+      .then(result => {
+        const user = result.user;
+        console.log(user);
+        setUser(user);
+      })
   }
 
   return (
@@ -45,7 +58,10 @@ function App() {
         :
         <>
           <button onClick={handleGoogleSignIn}>Sign in with Google</button>
+          <br />
           <button onClick={handleGitHubSignIn}>Sign in with GitHub</button>
+          <br />
+          <button onClick={handleFacebookSignIn}>Sign in with Facebook</button>
         </>
       }
       {/* oneksomoy email na dekhale condition kaj korbe na tai ekta unique kichu use korte hobe ejonno uid unique tai eti use kora hoyehe */}
